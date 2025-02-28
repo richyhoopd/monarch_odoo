@@ -1,11 +1,26 @@
 # MONARCH MODELO 1
 ```mermaid
 erDiagram
+    Coordinadores {
+        INT id PK
+        VARCHAR nombre
+        VARCHAR telefono
+        VARCHAR id_monarch
+        VARCHAR id_telmex
+        VARCHAR correo
+    }
+
     Tecnicos {
         INT id PK
         VARCHAR nombre
         VARCHAR contacto
         INT zona_id FK
+        VARCHAR NSS
+        VARCHAR celular
+        VARCHAR marca_auto
+        VARCHAR placas
+        INT coordinador_id_monarch FK
+        INT coord_id_telmex FK
     }
 
     Tarifas {
@@ -14,15 +29,6 @@ erDiagram
         INT rango_distancia_min
         INT rango_distancia_max
         DECIMAL costo
-    }
-
-    Almacen {
-        INT id PK
-        VARCHAR nombre_material
-        TEXT descripcion
-        VARCHAR unidad_medida
-        INT cantidad
-        INT proveedor_id FK
     }
 
     Clientes {
@@ -35,11 +41,12 @@ erDiagram
 
     Zonas {
         INT id PK
-        VARCHAR nombre
+        VARCHAR area
         VARCHAR distrito
         VARCHAR ciudad
         VARCHAR estado
         VARCHAR pais
+        VARCHAR codigo_postal
     }
 
     Instalaciones {
@@ -55,13 +62,7 @@ erDiagram
         INT ont_id FK
         INT distancia_mts
         VARCHAR tipo_construccion
-    }
-
-    UsoMateriales {
-        INT id PK
-        INT instalacion_id FK
-        INT material_id FK
-        INT cantidad_usada
+        INT id_tipo_bajante FK
     }
 
     ONT {
@@ -69,14 +70,13 @@ erDiagram
         VARCHAR modelo
         VARCHAR marca
         VARCHAR serie
-        TEXT foto_ont
+        INT cantidad_disponible
     }
 
-    Proveedores {
+    TiposBajante {
         INT id PK
-        VARCHAR nombre
-        VARCHAR contacto
-        VARCHAR direccion
+        VARCHAR concepto
+        DECIMAL precio
     }
 
     FormulariosCaptura {
@@ -96,15 +96,27 @@ erDiagram
         INT orden_servicio_id FK
     }
 
+    Emulacion {
+        INT id PK
+        INT instalacion_id FK
+        BOOL cobrable
+        DECIMAL PU
+        INT area_id FK
+        INT id_tipo_bajante FK
+    }
+
     Tecnicos }|--|| Zonas : "zona_id"
     Clientes }|--|| Zonas : "distrito_id"
-    Almacen }|--|| Proveedores : "proveedor_id"
     Instalaciones }|--|| Clientes : "cliente_id"
     Instalaciones }|--|| Tecnicos : "tecnico_id"
     Instalaciones }|--|| Tarifas : "tarifa_id"
     Instalaciones }|--|| ONT : "ont_id"
-    UsoMateriales }|--|| Instalaciones : "instalacion_id"
-    UsoMateriales }|--|| Almacen : "material_id"
+    Instalaciones }|--|| TiposBajante : "id_tipo_bajante"
     FormulariosCaptura }|--|| Tecnicos : "coordinador_id"
     FormulariosCaptura }|--|| ONT : "ont_id"
     FormulariosCaptura }|--|| Instalaciones : "orden_servicio_id"
+    Tecnicos }|--|| Coordinadores : "coordinador_id_monarch"
+    Tecnicos }|--|| Coordinadores : "coord_id_telmex"
+    Emulacion }|--|| Instalaciones : "instalacion_id"
+    Emulacion }|--|| Zonas : "area_id"
+    Emulacion }|--|| TiposBajante : "id_tipo_bajante"
