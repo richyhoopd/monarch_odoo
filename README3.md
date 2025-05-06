@@ -1,24 +1,32 @@
+```mermaid
 erDiagram
 
     CLIENTE {
         int id PK
-        varchar nombre
+        varchar primer_nombre
+        varchar segundo_nombre
+        varchar apellido_paterno
+        varchar apellido_materno
+        varchar curp
         varchar rfc
-        varchar telefono
+        varchar telefono_principal
+        varchar telefono_alterno
         varchar email
-        int direccion_id FK
-        int estado_cuenta_id FK
-        datetime fecha_registro
-    }
-
-    DIRECCION {
-        int id PK
-        varchar calle
-        varchar numero
+        varchar calle_principal
+        varchar calle_secundaria
+        varchar numero_exterior
+        varchar numero_interior
         varchar colonia
-        varchar ciudad
+        varchar municipio
         varchar estado
         varchar codigo_postal
+        varchar identificacion_anverso
+        varchar identificacion_reverso
+        varchar comprobante_domicilio
+        varchar nip
+        varchar tipo_cliente
+        int estado_cuenta_id FK
+        datetime fecha_registro
     }
 
     ESTADO_CUENTA {
@@ -26,15 +34,19 @@ erDiagram
         date fecha_corte
         varchar semana
         int año
+        varchar master
+        varchar folio
         decimal saldo_pendiente
         varchar estatus
         int ultimo_pago_id FK
+        decimal mora_acumulada
+        int dias_vencidos
     }
 
     ORDEN {
         int id PK
         int cliente_id FK
-        varchar folio
+        varchar folio_siac
         date fecha_venta
         date fecha_instalacion
         varchar estatus
@@ -42,6 +54,9 @@ erDiagram
         int paquete_id FK
         int estrategia_id FK
         decimal importe_total
+        boolean portabilidad
+        varchar telefono_portar
+        varchar observaciones_tecnicas
     }
 
     PAGO {
@@ -53,40 +68,44 @@ erDiagram
         varchar referencia
         varchar estatus
         varchar observaciones
+        varchar canal_pago
+        varchar autorizacion
     }
 
     PAQUETE {
         int id PK
         varchar nombre
-        varchar tipo_linea
+        varchar codigo
         varchar descripcion
-        decimal costo_mensual
+        int tarifa_id FK
+        varchar tipo_servicio
+        boolean activo
     }
 
-    PROMOTOR {
+    PERSONAL {
         int id PK
-        varchar nombre
+        varchar codigo
+        varchar nombre_completo
         varchar telefono
         varchar email
-        int supervisor_id FK
+        varchar tipo "PROMOTOR|COORDINADOR"
+        varchar division
+        varchar distrito
+        int coordinador_id FK "Null si es coordinador"
+        varchar estatus
+        datetime fecha_registro
     }
 
     ESTRATEGIA_VENTA {
         int id PK
         varchar nombre
-        varchar proyecto
+        varchar codigo
+        varchar proyecto_empresa
+        varchar proyecto_estrategia
         date fecha_inicio
         date fecha_fin
         varchar estatus
-    }
-
-    INVENTARIO {
-        int id PK
-        varchar tipo_equipo
-        varchar modelo
-        varchar serie
-        varchar estatus
-        int orden_id FK
+        decimal meta_ventas
     }
 
     HISTORIAL_COBRANZA {
@@ -97,16 +116,50 @@ erDiagram
         varchar resultado
         varchar observaciones
         int agente_id FK
+        varchar accion_siguiente
+        date fecha_proximo_contacto
+        varchar nivel_riesgo
     }
 
-    %% Relaciones mejoradas
+    TARIFA {
+        int id PK
+        varchar codigo
+        varchar denominacion
+        decimal precio
+        varchar estatus
+        varchar canales_venta
+        int actualizado_por FK
+        datetime ultima_actualizacion
+        varchar notas
+    }
+
+    PRODUCTO {
+        int id PK
+        varchar nombre
+        varchar referencia_interna
+        varchar codigo
+        int responsable_id FK
+        decimal precio_base
+        varchar estatus
+        varchar especificaciones_tecnicas
+    }
+
+    TARIFA_PRODUCTO {
+        int tarifa_id FK
+        int producto_id FK
+        int cantidad
+        varchar notas
+    }
+
+
     CLIENTE ||--o{ ORDEN : "realiza"
-    CLIENTE ||--|{ DIRECCION : "tiene"
     CLIENTE ||--|| ESTADO_CUENTA : "tiene"
     ORDEN ||--|{ PAGO : "genera"
     ORDEN }|--|| PAQUETE : "contiene"
-    ORDEN }|--|| PROMOTOR : "asignado_a"
+    ORDEN }|--|| PERSONAL : "asignado_a"
     ORDEN }|--|| ESTRATEGIA_VENTA : "asociado_a"
-    ORDEN ||--o{ INVENTARIO : "utiliza"
     CLIENTE ||--o{ HISTORIAL_COBRANZA : "registra"
-    PROMOTOR }|--|| PROMOTOR : "supervisado_por"
+    PERSONAL }|--o{ PERSONAL : "supervisa"
+    PAQUETE }|--|| TARIFA : "usa"
+    TARIFA ||--|{ TARIFA_PRODUCTO : "incluye"
+    PRODUCTO ||--o{ TARIFA_PRODUCTO : "aparece_en"
