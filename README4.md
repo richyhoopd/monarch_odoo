@@ -8,9 +8,9 @@ flowchart TD
     C --> E[Ingresar Información en App Canales Externos]
     E --> F[Generar SIAC_CODE]
     
-    F --> G[📧 Email con ZIP del Reporte]
+    F --> G[Email con ZIP del Reporte]
     G --> H[Descompresión del Archivo]
-    H --> I[📊 Acceso a Diario de Ventas Excel]
+    H --> I[Acceso a Diario de Ventas Excel]
     I --> J[Saltarse el Resumen]
     J --> K[Acceso Detail]
     
@@ -110,8 +110,8 @@ flowchart TD
     ZZZ[Alerta Pagos Pendientes] -.-> XX
     
     %% Proceso de Importación Diario de Ventas
-    AAAA[📧 Recepción Email Diario] --> G
-    BBBB[🔄 Proceso Automático cada X horas] -.-> G
+    AAAA[Recepción Email Diario] --> G
+    BBBB[Proceso Automático cada X horas] -.-> G
     
     %% Estilos por Estado
     classDef startEnd fill:#e1f5fe
