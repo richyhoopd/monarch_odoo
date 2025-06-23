@@ -112,23 +112,7 @@ flowchart TD
     %% Proceso de Importación Diario de Ventas
     AAAA[Recepción Email Diario] --> G
     BBBB[Proceso Automático cada X horas] -.-> G
-    
-    %% Estilos por Estado
-    classDef startEnd fill:#e1f5fe
-    classDef external fill:#e8f5e8
-    classDef pendiente fill:#ffcdd2
-    classDef abierta fill:#fff9c4
-    classDef llamada fill:#fff9c4
-    classDef posteada fill:#c8e6c8
-    classDef tecnico fill:#ffcdd2
-    classDef cobranza fill:#fff9c4
-    classDef pagada fill:#c8e6c8
-    classDef process fill:#f3e5f5
-    classDef decision fill:#fff3e0
-    classDef success fill:#e8f5e8
-    classDef warning fill:#fff8e1
-    classDef cancelado fill:#f5f5f5
-    classDef email fill:#e3f2fd
+
     
     class A,D,HHH startEnd
     class C,E,F external
